@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.third.dto.SensorDTO;
 import ru.alishev.springcourse.third.model.Sensor;
 import ru.alishev.springcourse.third.service.SensorService;
+import ru.alishev.springcourse.third.util.SensorErrorResponse;
+import ru.alishev.springcourse.third.util.SensorNotCreatedException;
+import ru.alishev.springcourse.third.util.SensorNotFoundException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,28 +34,28 @@ public class SensorController {
     @GetMapping()
     public List<SensorDTO> getSensorList() {
         return sensorService.findAll().stream()
-                .map(this::convertToPersonDTO)
+                .map(this::convertToSensorDTO)
                 .collect(Collectors.toList()); // Jackson конвертирует эти объекты в JSON
     }
 
     @GetMapping("/{id}")
-    public PersonDTO getPerson(@PathVariable("id") int id) {
+    public SensorDTO getSensor(@PathVariable("id") int id) {
         // Статус - 200
-        return convertToPersonDTO(peopleService.findOne(id));
+        return convertToSensorDTO(sensorService.findOne(id));
     }
 
     @ExceptionHandler
-    private ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException e) {
-        PersonErrorResponse response = new PersonErrorResponse(
-                "Person with this id wasn't found!", System.currentTimeMillis());
+    private ResponseEntity<SensorErrorResponse> handleException(SensorNotFoundException e) {
+        SensorErrorResponse response = new SensorErrorResponse(
+                "Sensor with this id wasn't found!", System.currentTimeMillis());
 
         //в HTTP ответе тело ответа (response) и статус в заголовке
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // NOT_FOUND - 404 статус
     }
 
 
-    @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid PersonDTO personDTO, BindingResult bindingResult) {
+    @PostMapping("/registration")
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             System.out.println("ERROR");
@@ -64,9 +67,9 @@ public class SensorController {
                         .append(error.getDefaultMessage())
                         .append(";");
             }
-            throw new PersonNotCreatedException(errorMsg.toString());
+            throw new SensorNotCreatedException(errorMsg.toString());
         }
-        peopleService.save(convertToPerson(personDTO));
+        sensorService.save(convertToSensor(sensorDTO));
         // отправляем HTTP ответ с пустым телом и со статус 200
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -75,13 +78,13 @@ public class SensorController {
         return modelMapper.map(sensorDTO, Sensor.class);
     }
 
-    private SensorDTO convertToPersonDTO(Person person) {
-        return modelMapper.map(person, PersonDTO.class);
+    private SensorDTO convertToSensorDTO(Sensor sensor) {
+        return modelMapper.map(sensor, SensorDTO.class);
     }
 
     @ExceptionHandler
-    private ResponseEntity<PersonErrorResponse> handleException(PersonNotCreatedException e) {
-        PersonErrorResponse response = new PersonErrorResponse(
+    private ResponseEntity<SensorErrorResponse> handleException(SensorNotCreatedException e) {
+        SensorErrorResponse response = new SensorErrorResponse(
                 e.getMessage(), System.currentTimeMillis());
 
         //в HTTP ответе тело ответа (response) и статус в заголовке
