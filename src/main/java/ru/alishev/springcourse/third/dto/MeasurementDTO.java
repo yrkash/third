@@ -1,24 +1,16 @@
-package ru.alishev.springcourse.third.model;
+package ru.alishev.springcourse.third.dto;
 
-import javax.persistence.*;
+import ru.alishev.springcourse.third.model.Sensor;
+
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Email;
-
 import java.time.LocalDateTime;
 
-
-@Entity
-@Table(name = "measurement")
-public class Measurement {
-
-    @Id
-    @Column (name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class MeasurementDTO {
 
     @Column(name = "value")
     @Min(value = -100, message = "Temperature should be greater than -100")
@@ -29,23 +21,9 @@ public class Measurement {
     @NotNull
     private boolean raining;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
     @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "id")
     private Sensor sensor;
-
-    public Measurement() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public double getValue() {
         return value;
@@ -61,14 +39,6 @@ public class Measurement {
 
     public void setRaining(boolean raining) {
         this.raining = raining;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Sensor getSensor() {
