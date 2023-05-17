@@ -6,6 +6,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.Email;
 
 import java.time.LocalDateTime;
@@ -18,28 +21,31 @@ public class Measurement {
     @Id
     @Column (name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+//    @JsonIgnore
+    private Integer id;
 
     @Column(name = "value")
     @Min(value = -100, message = "Temperature should be greater than -100")
     @Max(value = 100, message = "Temperature should be less than 100")
-    private double value;
+    private Double value;
 
     @Column(name = "raining")
     @NotNull
-    private boolean raining;
+    private Boolean raining;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "sensor_id", referencedColumnName = "id")
+//    @JsonManagedReference
+//    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    @JoinColumn(name = "sensor", referencedColumnName = "name")
     private Sensor sensor;
 
-    public Measurement() {
-    }
 
-    public int getId() {
+
+    public Integer getId() {
         return id;
     }
 
@@ -47,7 +53,7 @@ public class Measurement {
         this.id = id;
     }
 
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 
@@ -55,7 +61,7 @@ public class Measurement {
         this.value = value;
     }
 
-    public boolean isRaining() {
+    public Boolean isRaining() {
         return raining;
     }
 

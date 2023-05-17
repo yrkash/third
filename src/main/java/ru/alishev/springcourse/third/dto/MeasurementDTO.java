@@ -3,6 +3,7 @@ package ru.alishev.springcourse.third.dto;
 import ru.alishev.springcourse.third.model.Sensor;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
@@ -21,9 +22,8 @@ public class MeasurementDTO {
     @NotNull
     private boolean raining;
 
-    @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "id")
-    private Sensor sensor;
+    private SensorDTO sensor;
 
     public double getValue() {
         return value;
@@ -41,11 +41,11 @@ public class MeasurementDTO {
         this.raining = raining;
     }
 
-    public Sensor getSensor() {
+    public SensorDTO getSensor() {
         return sensor;
     }
 
-    public void setSensor(Sensor sensor) {
+    public void setSensor(SensorDTO sensor) {
         this.sensor = sensor;
     }
 }

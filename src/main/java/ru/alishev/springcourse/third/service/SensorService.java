@@ -32,4 +32,12 @@ public class SensorService {
         sensorRepository.save(sensor);
     }
 
+    @Transactional
+    public void register(Sensor sensor) {
+        sensorRepository.save(sensor);
+    }
+    public Optional<Sensor> findByName(String name) {
+        return sensorRepository.findByName(name);
+    }
+
 }

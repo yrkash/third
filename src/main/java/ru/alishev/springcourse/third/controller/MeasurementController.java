@@ -58,10 +58,10 @@ public class MeasurementController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> add(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult) {
 
+        Measurement measurementToAdd = convertToMeasurement(measurementDTO);
         if (bindingResult.hasErrors()) {
-            System.out.println("ERROR");
             StringBuilder errorMsg = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error: errors) {
@@ -72,15 +72,20 @@ public class MeasurementController {
             }
             throw new MeasurementNotCreatedException(errorMsg.toString());
         }
-        Optional<Sensor> optionalSensor = sensorService.findAll().stream()
+        measurementService.addMeasurement(measurementToAdd);
+        return ResponseEntity.ok(HttpStatus.OK);
+//        measurementService.save(convertToMeasurement(measurementDTO));
+//        return ResponseEntity.ok(HttpStatus.OK);
+        /*Optional<Sensor> optionalSensor = sensorService.findAll().stream()
                 .filter(p -> p.getName().equals(measurementDTO.getSensor().getName()))
                 .findFirst();
+        System.out.println(optionalSensor.get().getName());
         if (optionalSensor.isPresent()) {
             measurementService.save(convertToMeasurement(measurementDTO));
             return ResponseEntity.ok(HttpStatus.OK);
         } else {
             throw new SensorNotFoundException();
-        }
+        }*/
     }
 
     private Measurement convertToMeasurement(MeasurementDTO measurementDTO) {
