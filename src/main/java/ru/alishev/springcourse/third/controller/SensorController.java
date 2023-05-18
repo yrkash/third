@@ -13,6 +13,7 @@ import ru.alishev.springcourse.third.service.SensorService;
 import ru.alishev.springcourse.third.util.ErrorResponse;
 import ru.alishev.springcourse.third.util.SensorNotCreatedException;
 import ru.alishev.springcourse.third.util.SensorNotFoundException;
+import ru.alishev.springcourse.third.util.SensorValidator;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,11 +25,13 @@ public class SensorController {
 
     private final SensorService sensorService;
     private final ModelMapper modelMapper;
+    private final SensorValidator sensorValidator;
 
     @Autowired
-    public SensorController(SensorService sensorService, ModelMapper modelMapper) {
+    public SensorController(SensorService sensorService, ModelMapper modelMapper, SensorValidator sensorValidator) {
         this.sensorService = sensorService;
         this.modelMapper = modelMapper;
+        this.sensorValidator = sensorValidator;
     }
 
     @GetMapping()
@@ -57,14 +60,16 @@ public class SensorController {
     @PostMapping("/registration")
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
 
+        Sensor sensorToAdd = convertToSensor(sensorDTO);
+        sensorValidator.validate(sensorToAdd, bindingResult);
+
         if (bindingResult.hasErrors()) {
             System.out.println("ERROR");
             StringBuilder errorMsg = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error: errors) {
+            for (FieldError error : errors) {
                 errorMsg.append(error.getField())
-                        .append(" - ")
-                        .append(error.getDefaultMessage())
+                        .append(" - ").append(error.getDefaultMessage() == null ? error.getCode() : error.getDefaultMessage())
                         .append(";");
             }
             throw new SensorNotCreatedException(errorMsg.toString());
@@ -87,7 +92,6 @@ public class SensorController {
         ErrorResponse response = new ErrorResponse(
                 e.getMessage(), System.currentTimeMillis());
 
-        //в HTTP ответе тело ответа (response) и статус в заголовке
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // BAD_REQUEST - 400 статус
     }
 
