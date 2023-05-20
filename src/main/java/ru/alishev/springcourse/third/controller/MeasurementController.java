@@ -8,16 +8,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.third.dto.MeasurementDTO;
-import ru.alishev.springcourse.third.dto.SensorDTO;
 import ru.alishev.springcourse.third.model.Measurement;
-import ru.alishev.springcourse.third.model.Sensor;
 import ru.alishev.springcourse.third.service.MeasurementService;
 import ru.alishev.springcourse.third.service.SensorService;
 import ru.alishev.springcourse.third.util.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,11 +23,14 @@ public class MeasurementController {
 
     private final MeasurementService measurementService;
     private final SensorService sensorService;
+
+    private final MeasurementValidator measurementValidator;
     private final ModelMapper modelMapper;
     @Autowired
-    public MeasurementController(MeasurementService measurementService, SensorService sensorService, ModelMapper modelMapper) {
+    public MeasurementController(MeasurementService measurementService, SensorService sensorService, MeasurementValidator measurementValidator, ModelMapper modelMapper) {
         this.measurementService = measurementService;
         this.sensorService = sensorService;
+        this.measurementValidator = measurementValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -48,44 +48,30 @@ public class MeasurementController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(SensorNotFoundException e) {
+    private ResponseEntity<ErrorResponse> handleException(MeasurementException e) {
         ErrorResponse response = new ErrorResponse(
-                "Sensor with this id wasn't found!", System.currentTimeMillis());
-
-        //в HTTP ответе тело ответа (response) и статус в заголовке
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // NOT_FOUND - 404 статус
+                e.getMessage(), System.currentTimeMillis());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // BAD_REQUEST - 400 статус
     }
 
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(MeasurementNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(
+                "Measurement with this id not found", System.currentTimeMillis());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // NOT_FOUND - 404 статус
+    }
 
     @PostMapping("/add")
     public ResponseEntity<HttpStatus> add(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult) {
 
         Measurement measurementToAdd = convertToMeasurement(measurementDTO);
+        measurementValidator.validate(measurementToAdd,bindingResult);
         if (bindingResult.hasErrors()) {
-            StringBuilder errorMsg = new StringBuilder();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error: errors) {
-                errorMsg.append(error.getField())
-                        .append(" - ")
-                        .append(error.getDefaultMessage())
-                        .append(";");
-            }
-            throw new MeasurementNotCreatedException(errorMsg.toString());
+//            Throw new MeasurementException() with message
+            ErrorMessage.makeErrorMessage(bindingResult);
         }
         measurementService.addMeasurement(measurementToAdd);
         return ResponseEntity.ok(HttpStatus.OK);
-//        measurementService.save(convertToMeasurement(measurementDTO));
-//        return ResponseEntity.ok(HttpStatus.OK);
-        /*Optional<Sensor> optionalSensor = sensorService.findAll().stream()
-                .filter(p -> p.getName().equals(measurementDTO.getSensor().getName()))
-                .findFirst();
-        System.out.println(optionalSensor.get().getName());
-        if (optionalSensor.isPresent()) {
-            measurementService.save(convertToMeasurement(measurementDTO));
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else {
-            throw new SensorNotFoundException();
-        }*/
     }
 
     private Measurement convertToMeasurement(MeasurementDTO measurementDTO) {
@@ -95,15 +81,5 @@ public class MeasurementController {
     private MeasurementDTO convertToMeasurementDTO(Measurement measurement) {
         return modelMapper.map(measurement, MeasurementDTO.class);
     }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(MeasurementNotCreatedException e) {
-        ErrorResponse response = new ErrorResponse(
-                e.getMessage(), System.currentTimeMillis());
-
-        //в HTTP ответе тело ответа (response) и статус в заголовке
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // BAD_REQUEST - 400 статус
-    }
-
 
 }

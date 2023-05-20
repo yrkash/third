@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alishev.springcourse.third.model.Measurement;
+import ru.alishev.springcourse.third.model.Sensor;
 import ru.alishev.springcourse.third.repository.MeasurementRepository;
 import ru.alishev.springcourse.third.util.MeasurementNotFoundException;
 
@@ -27,6 +28,10 @@ public class MeasurementService {
     public Measurement findOne(int id) {
         Optional<Measurement> foundMeasurement = measurementRepository.findById(id);
         return foundMeasurement.orElseThrow(MeasurementNotFoundException::new);
+    }
+
+    public Optional<Sensor> findBySensor(String sensorName) {
+        return sensorService.findByName(sensorName);
     }
 
     public List<Measurement> findAll() {
