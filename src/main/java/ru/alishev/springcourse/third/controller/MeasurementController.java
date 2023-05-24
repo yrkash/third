@@ -41,6 +41,14 @@ public class MeasurementController {
                 .collect(Collectors.toList()); // Jackson конвертирует эти объекты в JSON
     }
 
+    @GetMapping("/rainyDaysCount")
+    public Long getCountOfRaining() {
+        return measurementService.findAll().stream()
+                .filter(Measurement::isRaining)
+                .count();
+    }
+
+
     @GetMapping("/{id}")
     public MeasurementDTO getMeasurement(@PathVariable("id") int id) {
         // Статус - 200

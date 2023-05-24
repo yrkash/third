@@ -37,11 +37,13 @@ public class MeasurementService {
     public List<Measurement> findAll() {
         return measurementRepository.findAll();}
 
+
     @Transactional
     public void addMeasurement(Measurement measurement) {
         enrichMeasurement(measurement);
         measurementRepository.save(measurement);
     }
+
 
     public void enrichMeasurement(Measurement measurement) {
         // мы должны сами найти сенсор из БД по имени и вставить объект из Hibernate persistence context'а
