@@ -23,8 +23,8 @@ public class SensorService {
     public List<Sensor> findAll() {return sensorRepository.findAll();}
 
     public Sensor findOne(int id) {
-        Optional<Sensor> foundPerson = sensorRepository.findById(id);
-        return foundPerson.orElseThrow(SensorNotFoundException::new);
+        Optional<Sensor> foundSensor = sensorRepository.findById(id);
+        return foundSensor.orElseThrow(SensorNotFoundException::new);
     }
 
     @Transactional

@@ -41,6 +41,14 @@ public class MeasurementController {
                 .collect(Collectors.toList()); // Jackson конвертирует эти объекты в JSON
     }
 
+    @GetMapping("/name/{name}")
+    public List<MeasurementDTO> getMeasurementListForSensor(@PathVariable("name") String name) {
+        return measurementService.findAll().stream()
+                .filter(m-> m.getSensor().getName().equals(name))
+                .map(this::convertToMeasurementDTO)
+                .collect(Collectors.toList()); // Jackson конвертирует эти объекты в JSON
+    }
+
     @GetMapping("/rainyDaysCount")
     public Long getCountOfRaining() {
         return measurementService.findAll().stream()

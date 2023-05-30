@@ -37,6 +37,8 @@ public class MeasurementService {
     public List<Measurement> findAll() {
         return measurementRepository.findAll();}
 
+    public List<Measurement> findMeasurementsBySensor(Sensor sensor) {
+        return measurementRepository.findAllBySensor(sensor);}
 
     @Transactional
     public void addMeasurement(Measurement measurement) {

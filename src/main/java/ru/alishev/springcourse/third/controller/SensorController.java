@@ -14,6 +14,7 @@ import ru.alishev.springcourse.third.util.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,6 +43,16 @@ public class SensorController {
     public SensorDTO getSensor(@PathVariable("id") int id) {
         // Статус - 200
         return convertToSensorDTO(sensorService.findOne(id));
+    }
+
+    @GetMapping("/name/{name}")
+    public SensorDTO getSensorForName(@PathVariable("name") String name) {
+        Optional<Sensor> optionalSensor = sensorService.findByName(name);
+        if (optionalSensor.isPresent()) {
+            return convertToSensorDTO(optionalSensor.get());
+        } else {
+            throw new SensorNotFoundException();
+        }
     }
     @PostMapping("/registration")
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
