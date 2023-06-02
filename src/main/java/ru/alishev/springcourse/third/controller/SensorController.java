@@ -1,6 +1,8 @@
 package ru.alishev.springcourse.third.controller;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class SensorController {
     private final ModelMapper modelMapper;
     private final SensorValidator sensorValidator;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
+
     @Autowired
     public SensorController(SensorService sensorService, ModelMapper modelMapper, SensorValidator sensorValidator) {
         this.sensorService = sensorService;
@@ -34,6 +38,7 @@ public class SensorController {
 
     @GetMapping()
     public List<SensorDTO> getSensorList() {
+        LOGGER.info("Get All sensors");
         return sensorService.findAll().stream()
                 .map(this::convertToSensorDTO)
                 .collect(Collectors.toList()); // Jackson конвертирует эти объекты в JSON
