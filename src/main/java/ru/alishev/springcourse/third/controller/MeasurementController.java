@@ -1,6 +1,8 @@
 package ru.alishev.springcourse.third.controller;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class MeasurementController {
 
     private final MeasurementValidator measurementValidator;
     private final ModelMapper modelMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
+
     @Autowired
     public MeasurementController(MeasurementService measurementService, SensorService sensorService, MeasurementValidator measurementValidator, ModelMapper modelMapper) {
         this.measurementService = measurementService;
@@ -36,6 +41,7 @@ public class MeasurementController {
 
     @GetMapping()
     public List<MeasurementDTO> getMeasurementList() {
+        LOGGER.info("Get All measurement");
         return measurementService.findAll().stream()
                 .map(this::convertToMeasurementDTO)
                 .collect(Collectors.toList()); // Jackson конвертирует эти объекты в JSON
@@ -43,6 +49,7 @@ public class MeasurementController {
 
     @GetMapping("/name/{name}")
     public List<MeasurementDTO> getMeasurementListForSensor(@PathVariable("name") String name) {
+        LOGGER.info("Get All measurement for a sensor");
         return measurementService.findAll().stream()
                 .filter(m-> m.getSensor().getName().equals(name))
                 .map(this::convertToMeasurementDTO)
@@ -51,6 +58,7 @@ public class MeasurementController {
 
     @GetMapping("/rainyDaysCount")
     public Long getCountOfRaining() {
+        LOGGER.info("Get count of rainy days");
         return measurementService.findAll().stream()
                 .filter(Measurement::isRaining)
                 .count();
