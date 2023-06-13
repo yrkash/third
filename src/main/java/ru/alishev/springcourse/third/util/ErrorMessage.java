@@ -16,7 +16,7 @@ public class ErrorMessage {
                     .append(" - ").append(error.getDefaultMessage() == null ? error.getCode() : error.getDefaultMessage())
                     .append(";");
         }
-        throw new MeasurementException(errorMsg.toString());
+        throw new CustomException(errorMsg.toString());
 
     }
 }

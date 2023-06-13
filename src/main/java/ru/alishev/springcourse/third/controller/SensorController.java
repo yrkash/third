@@ -6,11 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.third.dto.SensorDTO;
 import ru.alishev.springcourse.third.model.Sensor;
+import ru.alishev.springcourse.third.security.JWTUtil;
 import ru.alishev.springcourse.third.service.SensorService;
 import ru.alishev.springcourse.third.util.*;
 
@@ -21,19 +22,22 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sensors")
+@Secured("ROLE_ADMIN")
 public class SensorController {
 
     private final SensorService sensorService;
     private final ModelMapper modelMapper;
     private final SensorValidator sensorValidator;
+    private final JWTUtil jwtUtil;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
 
     @Autowired
-    public SensorController(SensorService sensorService, ModelMapper modelMapper, SensorValidator sensorValidator) {
+    public SensorController(SensorService sensorService, ModelMapper modelMapper, SensorValidator sensorValidator, JWTUtil jwtUtil) {
         this.sensorService = sensorService;
         this.modelMapper = modelMapper;
         this.sensorValidator = sensorValidator;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping()
@@ -66,7 +70,7 @@ public class SensorController {
         sensorValidator.validate(sensorToAdd, bindingResult);
 
         if (bindingResult.hasErrors()) {
-//            Throw new MeasurementException() with message
+//            Throw new CustomException() with message
             ErrorMessage.makeErrorMessage(bindingResult);
         }
         sensorService.save(convertToSensor(sensorDTO));
@@ -84,7 +88,7 @@ public class SensorController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(MeasurementException e) {
+    private ResponseEntity<ErrorResponse> handleException(CustomException e) {
         ErrorResponse response = new ErrorResponse(
                 e.getMessage(), System.currentTimeMillis());
 

@@ -72,7 +72,7 @@ public class MeasurementController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(MeasurementException e) {
+    private ResponseEntity<ErrorResponse> handleException(CustomException e) {
         ErrorResponse response = new ErrorResponse(
                 e.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // BAD_REQUEST - 400 статус
