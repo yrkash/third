@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>JSON Example</title>
+</head>
+<body>
+
+<form id="myForm">
+    <label for="value">Value:</label>
+    <input type="number" id="value" name="value" step="0.1">
+    <br><br>
+    <label for="raining">Raining:</label>
+    <input type="checkbox" id="raining" name="raining">
+    <br><br>
+    <label for="sensorName">Sensor Name:</label>
+    <input type="text" id="sensorName" name="sensorName">
+    <br><br>
+    <button type="button" onclick="sendData()">Send Data</button>
+</form>
+
+<script src="../../static/js/script.js"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

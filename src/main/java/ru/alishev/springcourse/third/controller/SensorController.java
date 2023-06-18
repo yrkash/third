@@ -73,7 +73,7 @@ public class SensorController {
 //            Throw new CustomException() with message
             ErrorMessage.makeErrorMessage(bindingResult);
         }
-        sensorService.save(convertToSensor(sensorDTO));
+        sensorService.save(sensorToAdd);
         // отправляем HTTP ответ с пустым телом и со статус 200
         return ResponseEntity.ok(HttpStatus.OK);
     }

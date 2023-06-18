@@ -30,7 +30,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/login","/auth/registration","/error").permitAll()
+                .antMatchers("/auth/login","/auth/registration","/error","/test").permitAll()
                 .antMatchers("/measurements/**").hasAnyRole("ADMIN","USER")
                 .antMatchers("/sensors/**").hasRole("ADMIN")
                 .anyRequest().permitAll()

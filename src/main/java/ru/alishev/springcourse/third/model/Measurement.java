@@ -40,7 +40,8 @@ public class Measurement {
     @ManyToOne
 //    @JsonManagedReference
 //    @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    @JoinColumn(name = "sensor", referencedColumnName = "name")
+    @JoinColumn(name = "sensor", referencedColumnName = "name") // Класс Sensor реализует интерфейс Serializable
+//    @JoinColumn(name = "sensor_id", referencedColumnName = "id") Не работает
     private Sensor sensor;
 
 
