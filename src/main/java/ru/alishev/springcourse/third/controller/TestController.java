@@ -30,4 +30,18 @@ public class TestController {
         */
         return "test/test";
     }
+
+    @GetMapping("/auth")
+    public String login() {
+//        model.addAttribute("sensor", sensorService.findAll());
+
+
+        //Кастомные запросы к контроллеру через сервис
+        /*
+        itemService.findByItemName("Airpods");
+        itemService.findByOwner(peopleService.findAll().get(0));
+        peopleService.test();
+        */
+        return "test/authentication";
+    }
 }

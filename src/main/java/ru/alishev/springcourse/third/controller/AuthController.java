@@ -1,6 +1,8 @@
 package ru.alishev.springcourse.third.controller;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,9 @@ public class AuthController {
     private final JWTUtil jwtUtil;
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
+
     @Autowired
     public AuthController(PersonValidator personValidator, RegistrationService registrationService, JWTUtil jwtUtil, ModelMapper modelMapper, AuthenticationManager authenticationManager) {
         this.personValidator = personValidator;
@@ -49,6 +54,8 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity<?>  performRegistration(@RequestBody @Valid PersonDTO personDTO,
                                                    BindingResult bindingResult) {
+        LOGGER.info("Registration of new User");
+
         Person person =convertToPerson(personDTO);
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -61,6 +68,7 @@ public class AuthController {
     }
     @PostMapping("/login")
     public ResponseEntity<?>  performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
+        LOGGER.info("Login...");
         UsernamePasswordAuthenticationToken authInputToken =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getUsername(), authenticationDTO.getPassword());
 

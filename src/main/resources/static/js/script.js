@@ -14,7 +14,7 @@ function sendData() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/measurements/add", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIGRldGFpbHMiLCJpc3MiOiJtaXRyeWFzb3YiLCJleHAiOjE2ODcwNzM1MzIsImlhdCI6MTY4NzA2OTkzMiwidXNlcm5hbWUiOiJhZG1pbiJ9.Q6szcZCtAyc33uzqZS5ywye8_ESripeEV6DzxZLK0DI');
+    xhr.setRequestHeader('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIGRldGFpbHMiLCJpc3MiOiJtaXRyeWFzb3YiLCJleHAiOjE2ODcyOTM4MjEsImlhdCI6MTY4NzI5MDIyMSwidXNlcm5hbWUiOiJhZG1pbiJ9.urfGeYLTCZSIj_qGiW7j73X0rZCl19uAIle9mk_qWls');
     xhr.send(JSON.stringify(jsonData));
 
     xhr.onreadystatechange = function() {
