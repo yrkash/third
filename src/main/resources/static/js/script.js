@@ -1,25 +1,41 @@
-function sendData() {
-    var value = document.getElementById("value").value;
-    var raining = document.getElementById("raining").checked;
-    var sensorName = document.getElementById("sensorName").value;
+let jwtToken_; // объявляем переменную глобально
 
-    var jsonData = {
-        "value": value,
-        "raining": raining,
-        "sensor": {
-            "name": sensorName
-        }
+async function login() {
+    const response = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        })
+    });
+
+    const data = await response.json();
+    jwtToken_ = data.jwtToken; // сохраняем значение jwtToken в переменную
+    console.log(jwtToken_);
+}
+async function sendData() {
+    const data = {
+        value: document.getElementById('value').value,
+        raining: document.getElementById('raining').checked,
+        sensor: {
+            "name": document.getElementById('sensorName').value
+            }
+
+        // jwtToken: jwtToken // добавляем jwtToken в данные
     };
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:8080/measurements/add", true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIGRldGFpbHMiLCJpc3MiOiJtaXRyeWFzb3YiLCJleHAiOjE2ODcyOTM4MjEsImlhdCI6MTY4NzI5MDIyMSwidXNlcm5hbWUiOiJhZG1pbiJ9.urfGeYLTCZSIj_qGiW7j73X0rZCl19uAIle9mk_qWls');
-    xhr.send(JSON.stringify(jsonData));
+    const response = await fetch('http://localhost:8080/measurements/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwtToken_
+        },
+        body: JSON.stringify(data)
+    });
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            alert(xhr.responseText);
-        }
-    };
+    const result = await response.json();
+    console.log(result);
 }

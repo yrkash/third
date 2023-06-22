@@ -1,4 +1,5 @@
 const loginForm = document.getElementById('login-form');
+let jwtToken = '';
 
 loginForm.addEventListener('submit', function(event) {
     event.preventDefault();
@@ -7,6 +8,7 @@ loginForm.addEventListener('submit', function(event) {
 
     const data = { username: username, password: password };
 
+    // отправляем данные формы на сервер
     fetch('http://localhost:8080/auth/login', {
         method: 'POST',
         headers: {
@@ -17,7 +19,20 @@ loginForm.addEventListener('submit', function(event) {
         .then(response => response.json())
         .then(data => {
             if (data.jwtToken) {
-                alert(`JWT token: ${data.jwtToken}`);
+                jwtToken = data.jwtToken; // сохраняем jwtToken в переменную
+
+                // отправляем GET запрос на сервер с параметром jwtToken
+                fetch(`http://localhost:8080/test?jwtToken=${jwtToken}`, {
+                    method: 'GET'
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
             } else {
                 alert('Authentication failed.');
             }
