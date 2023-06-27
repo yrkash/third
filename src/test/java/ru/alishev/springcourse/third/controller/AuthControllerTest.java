@@ -3,6 +3,7 @@ package ru.alishev.springcourse.third.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,16 +48,8 @@ public class AuthControllerTest {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @Mock
-    private AuthenticationManager authenticationManager;
-
-    @Mock
-    private BindingResult bindingResult;
-
     private MockMvc mockMvc;
-
     private PersonDTO personDTO;
-
 
 
     @Before
@@ -83,9 +76,25 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void postAdminIsOk() throws Exception {
+    public void testPerformRegistrationSuccess() throws Exception {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", "admin");
+        jsonObject.put("username", personDTO.getUsername());
+        jsonObject.put("password", personDTO.getPassword());
+        jsonObject.put("yearOfBirth", personDTO.getYearOfBirth());
+        String json = jsonObject.toString();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/registration")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.jwtToken").value(jwtUtil.generateToken(personDTO.getUsername())))
+                .andExpect(jsonPath("$.timestamp").isNotEmpty());
+    }
+
+    @Test
+    public void testPerformLoginSuccess() throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", "user105");
         jsonObject.put("password", "12345");
         String json = jsonObject.toString();
 
@@ -93,8 +102,11 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.jwtToken").value(jwtUtil.generateToken("admin")))
-        ;
+                .andExpect(jsonPath("$.jwtToken").value(jwtUtil.generateToken("user105")));
+    }
+    @After
+    public void reset() {
+        registrationService.delete(personDTO.getUsername());
     }
 
 /*

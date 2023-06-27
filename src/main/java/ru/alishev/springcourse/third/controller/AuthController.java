@@ -83,10 +83,32 @@ public class AuthController {
         return new ResponseEntity<>(new JWTResponse(jwtToken, System.currentTimeMillis()),HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?>  performDelete(@RequestBody AuthenticationDTO authenticationDTO) {
+        LOGGER.info("Delete user...");
+        UsernamePasswordAuthenticationToken authInputToken =
+                new UsernamePasswordAuthenticationToken(authenticationDTO.getUsername(), authenticationDTO.getPassword());
+
+        try {
+            authenticationManager.authenticate(authInputToken);
+        } catch (BadCredentialsException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "Incorrect login/password", System.currentTimeMillis());
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+        Person person = convertToPerson(authenticationDTO);
+        System.out.println(person.getId());
+        registrationService.delete(authenticationDTO.getUsername());
+        return new ResponseEntity<>(authenticationDTO.getUsername(),HttpStatus.OK);
+    }
+
     public Person convertToPerson(PersonDTO personDTO) {
         return this.modelMapper.map(personDTO, Person.class);
     }
 
+    public Person convertToPerson(AuthenticationDTO authenticationDTO) {
+        return this.modelMapper.map(authenticationDTO, Person.class);
+    }
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(CustomException e) {
         ErrorResponse response = new ErrorResponse(

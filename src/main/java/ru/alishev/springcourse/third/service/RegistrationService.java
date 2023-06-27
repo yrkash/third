@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alishev.springcourse.third.model.Person;
 import ru.alishev.springcourse.third.repository.PersonRepository;
 
+import java.util.Optional;
+
 @Service
 public class RegistrationService {
     private final PersonRepository personRepository;
@@ -21,6 +23,15 @@ public class RegistrationService {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRole("ROLE_USER");
         personRepository.save(person);
+    }
+
+    @Transactional
+    public void delete(String username) {
+        Optional<Person> optionalPerson = personRepository.findByUsername(username);
+        if (optionalPerson.isPresent()) {
+            personRepository.delete(optionalPerson.get());
+
+        }
     }
 
 }
