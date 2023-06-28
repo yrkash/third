@@ -78,6 +78,21 @@ public class SensorController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<HttpStatus> delete(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
+
+        Sensor sensorToDelete = convertToSensor(sensorDTO);
+        Optional<Sensor> optionalSensor = sensorService.findByName(sensorToDelete.getName());
+        if (optionalSensor.isPresent()) {
+            sensorService.delete(sensorToDelete.getName());
+            return ResponseEntity.ok(HttpStatus.OK);
+        } else {
+            ErrorResponse response = new ErrorResponse(
+                    "Sensor with this name not found!", System.currentTimeMillis());
+            return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     private Sensor convertToSensor(SensorDTO sensorDTO) {
         return modelMapper.map(sensorDTO, Sensor.class);

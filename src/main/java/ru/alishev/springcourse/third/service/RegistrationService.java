@@ -30,7 +30,6 @@ public class RegistrationService {
         Optional<Person> optionalPerson = personRepository.findByUsername(username);
         if (optionalPerson.isPresent()) {
             personRepository.delete(optionalPerson.get());
-
         }
     }
 
