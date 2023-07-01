@@ -13,5 +13,6 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Intege
     Optional<Measurement> findBySensor(String sensorName);
 
     List<Measurement> findAllBySensor(Sensor sensor);
+    List<Measurement> findAllByValue(Double value);
 
 }

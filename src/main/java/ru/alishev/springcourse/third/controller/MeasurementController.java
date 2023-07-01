@@ -10,13 +10,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.third.dto.MeasurementDTO;
+import ru.alishev.springcourse.third.dto.SensorDTO;
 import ru.alishev.springcourse.third.model.Measurement;
+import ru.alishev.springcourse.third.model.Sensor;
 import ru.alishev.springcourse.third.service.MeasurementService;
 import ru.alishev.springcourse.third.service.SensorService;
 import ru.alishev.springcourse.third.util.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -96,6 +99,21 @@ public class MeasurementController {
         }
         measurementService.addMeasurement(measurementToAdd);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+//    Only for MeasurementControllerTests
+    @DeleteMapping("/delete")
+    public ResponseEntity<HttpStatus> delete(Integer id) {
+
+        try {
+            measurementService.findOne(id);
+            measurementService.delete(id);
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (MeasurementNotFoundException e) {
+            ErrorResponse response = new ErrorResponse(
+                    "Sensor with this name not found!", System.currentTimeMillis());
+            return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+        }
     }
 
     private Measurement convertToMeasurement(MeasurementDTO measurementDTO) {

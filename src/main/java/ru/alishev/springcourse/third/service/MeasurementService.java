@@ -37,13 +37,21 @@ public class MeasurementService {
     public List<Measurement> findAll() {
         return measurementRepository.findAll();}
 
-    public List<Measurement> findMeasurementsBySensor(Sensor sensor) {
-        return measurementRepository.findAllBySensor(sensor);}
+    public List<Measurement> findMeasurementsByValue(Double value) {
+        return measurementRepository.findAllByValue(value);}
 
     @Transactional
     public void addMeasurement(Measurement measurement) {
         enrichMeasurement(measurement);
         measurementRepository.save(measurement);
+    }
+
+    @Transactional
+    public void delete(Integer measurementId) {
+        Optional<Measurement> optionalMeasurement = measurementRepository.findById(measurementId);
+        if (optionalMeasurement.isPresent()) {
+            measurementRepository.delete(optionalMeasurement.get());
+        }
     }
 
 
