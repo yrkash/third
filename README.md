@@ -3,16 +3,16 @@ REST сервис по регистрации погодных данных
 [Техническое задание](./ТЗ.pdf)
 
 REST API спроектирован и разработан на стеке:
-JPA. Hibernate (Postgres)
-Spring Boot 3
-Spring validator
-Spring MVC
-Maven
-Spring security with ROLES
-Authentication with JSON Web Token (JWT)
-Logback
-Junit
-AJAX
+* JPA. Hibernate (Postgres)
+* Spring Boot 3
+* Spring validator
+* Spring MVC
+* Maven
+* Spring security with ROLES
+* Authentication with JSON Web Token (JWT)
+* Logback
+* Junit
+* AJAX
 
 API реализует следующие возможности:
 1. Без аутентификации:
