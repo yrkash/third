@@ -40,8 +40,6 @@ public class MeasurementControllerTest {
 
     private MockMvc mockMvc;
 
-    private MeasurementDTO measurementDTO;
-    private SensorDTO sensorDTO;
 
     public MeasurementControllerTest() {
     }
@@ -49,12 +47,7 @@ public class MeasurementControllerTest {
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        measurementDTO = new MeasurementDTO();
-        sensorDTO = new SensorDTO();
-        sensorDTO.setName("testSensor");
-        measurementDTO.setValue(17.8);
-        measurementDTO.setRaining(true);
-        measurementDTO.setSensor(sensorDTO);
+
     }
 
     @Test

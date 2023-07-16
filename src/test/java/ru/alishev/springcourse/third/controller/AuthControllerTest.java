@@ -53,7 +53,7 @@ public class AuthControllerTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         personDTO = new PersonDTO();
@@ -109,24 +109,6 @@ public class AuthControllerTest {
         registrationService.delete(personDTO.getUsername());
     }
 
-/*
-
-    @Test
-    public void testPerformRegistrationSuccess() throws Exception {
-        Mockito.when(jwtUtil.generateToken(personDTO.getUsername())).thenReturn("jwtToken");
-        System.out.println(personDTO.getUsername() + "!!!");
-        String token = jwtUtil.generateToken(personDTO.getUsername());
-        System.out.println(token);
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/registration")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(personDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.jwtToken", Matchers.is(jwtUtil.generateToken(personDTO.getUsername()))))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.timeStamp", Matchers.notNullValue()));
-
-        Mockito.verify(registrationService, Mockito.times(1)).register(Mockito.any(Person.class));
-    }
-*/
 
     private static String asJsonString(final Object obj) {
         try {
