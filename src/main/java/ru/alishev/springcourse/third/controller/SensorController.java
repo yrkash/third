@@ -1,5 +1,6 @@
 package ru.alishev.springcourse.third.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/sensors")
 @Secured("ROLE_ADMIN")
+@Tag(name = "Сенсоры", description = "Контроллер для работы с сенсорами. Требуется JWT-аутентификация (только ROLE.ADMIN)")
 public class SensorController {
 
     private final SensorService sensorService;

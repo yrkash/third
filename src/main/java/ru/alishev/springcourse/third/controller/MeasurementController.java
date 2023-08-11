@@ -1,5 +1,6 @@
 package ru.alishev.springcourse.third.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/measurements")
+@Tag(name = "Измерения", description = "Контроллер для работы с измерениями. Требуется JWT-аутентификация")
 public class MeasurementController {
 
     private final MeasurementService measurementService;

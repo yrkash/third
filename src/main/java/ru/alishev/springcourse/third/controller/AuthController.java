@@ -1,5 +1,9 @@
 package ru.alishev.springcourse.third.controller;
 
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Пользователи", description = "Методы для работы с пользователями")
 public class AuthController {
 
     private final PersonValidator personValidator;
@@ -51,7 +56,9 @@ public class AuthController {
     public String registrationPage(@ModelAttribute("person") Person person) {
         return "auth/registration";
     }
+
     @PostMapping("/registration")
+    @Operation(summary = "Регистрация пользователя")
     public ResponseEntity<?>  performRegistration(@RequestBody @Valid PersonDTO personDTO,
                                                    BindingResult bindingResult) {
         LOGGER.info("Registration of new User");
@@ -67,6 +74,7 @@ public class AuthController {
         return new ResponseEntity<>(new JWTResponse(jwtToken, System.currentTimeMillis()),HttpStatus.OK);
     }
     @PostMapping("/login")
+    @Operation(summary = "Аутентификация пользователя")
     public ResponseEntity<?>  performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
         LOGGER.info("Login...");
         UsernamePasswordAuthenticationToken authInputToken =
@@ -84,6 +92,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/delete")
+    @Operation(summary = "Удаление пользователя")
     public ResponseEntity<?>  performDelete(@RequestBody AuthenticationDTO authenticationDTO) {
         LOGGER.info("Delete user...");
         UsernamePasswordAuthenticationToken authInputToken =
