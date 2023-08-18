@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@RunWith(MockitoJUnitRunner.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
+@ActiveProfiles("test")
 public class AuthControllerTest {
 
     @Autowired
@@ -80,7 +81,7 @@ public class AuthControllerTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("username", personDTO.getUsername());
         jsonObject.put("password", personDTO.getPassword());
-        jsonObject.put("yearOfBirth", personDTO.getYearOfBirth());
+            jsonObject.put("yearOfBirth", personDTO.getYearOfBirth());
         String json = jsonObject.toString();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/registration")
