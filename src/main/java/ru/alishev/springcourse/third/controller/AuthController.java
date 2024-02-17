@@ -4,6 +4,7 @@ package ru.alishev.springcourse.third.controller;
 //import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Пользователи", description = "Методы для работы с пользователями")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final PersonValidator personValidator;
@@ -38,7 +40,7 @@ public class AuthController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
 
-    @Autowired
+    /*@Autowired
     public AuthController(PersonValidator personValidator, RegistrationService registrationService, JWTUtil jwtUtil, ModelMapper modelMapper, AuthenticationManager authenticationManager) {
         this.personValidator = personValidator;
         this.registrationService = registrationService;
@@ -46,7 +48,7 @@ public class AuthController {
         this.modelMapper = modelMapper;
         this.authenticationManager = authenticationManager;
     }
-
+*/
     @RequestMapping("/login")
     public String loginPage() {
         return "auth/login";

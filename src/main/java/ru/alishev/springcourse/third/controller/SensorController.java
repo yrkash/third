@@ -1,6 +1,7 @@
 package ru.alishev.springcourse.third.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sensors")
+@RequiredArgsConstructor
 @Secured("ROLE_ADMIN")
 @Tag(name = "Сенсоры", description = "Контроллер для работы с сенсорами. Требуется JWT-аутентификация (только ROLE.ADMIN)")
 public class SensorController {
@@ -33,14 +35,6 @@ public class SensorController {
     private final JWTUtil jwtUtil;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
-
-    @Autowired
-    public SensorController(SensorService sensorService, ModelMapper modelMapper, SensorValidator sensorValidator, JWTUtil jwtUtil) {
-        this.sensorService = sensorService;
-        this.modelMapper = modelMapper;
-        this.sensorValidator = sensorValidator;
-        this.jwtUtil = jwtUtil;
-    }
 
     @GetMapping()
     public List<SensorDTO> getSensorList() {

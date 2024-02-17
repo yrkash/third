@@ -1,5 +1,6 @@
 package ru.alishev.springcourse.third.dto;
 
+import lombok.Data;
 import ru.alishev.springcourse.third.model.Sensor;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+@Data
 public class MeasurementDTO {
 
     @Column(name = "value")
@@ -25,27 +27,5 @@ public class MeasurementDTO {
     @JoinColumn(name = "sensor_id", referencedColumnName = "id")
     private SensorDTO sensor;
 
-    public double getValue() {
-        return value;
-    }
 
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    public boolean isRaining() {
-        return raining;
-    }
-
-    public void setRaining(boolean raining) {
-        this.raining = raining;
-    }
-
-    public SensorDTO getSensor() {
-        return sensor;
-    }
-
-    public void setSensor(SensorDTO sensor) {
-        this.sensor = sensor;
-    }
 }

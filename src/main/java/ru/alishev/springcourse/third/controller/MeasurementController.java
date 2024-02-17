@@ -1,6 +1,7 @@
 package ru.alishev.springcourse.third.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/measurements")
+@RequiredArgsConstructor
 @Tag(name = "Измерения", description = "Контроллер для работы с измерениями. Требуется JWT-аутентификация")
 public class MeasurementController {
 
@@ -35,14 +37,6 @@ public class MeasurementController {
     private final ModelMapper modelMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorController.class);
-
-    @Autowired
-    public MeasurementController(MeasurementService measurementService, SensorService sensorService, MeasurementValidator measurementValidator, ModelMapper modelMapper) {
-        this.measurementService = measurementService;
-        this.sensorService = sensorService;
-        this.measurementValidator = measurementValidator;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping()
     public List<MeasurementDTO> getMeasurementList() {

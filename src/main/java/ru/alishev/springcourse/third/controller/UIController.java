@@ -1,5 +1,6 @@
 package ru.alishev.springcourse.third.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,13 +11,9 @@ import ru.alishev.springcourse.third.service.SensorService;
 
 @Controller
 @RequestMapping("/ui")
+@RequiredArgsConstructor
 public class UIController {
     private final SensorService sensorService;
-
-    @Autowired
-    public UIController(SensorService sensorService) {
-        this.sensorService = sensorService;
-    }
 
     @GetMapping()
     public String sendMeasurement(Model model, @RequestParam(value = "jwtToken") String jwtToken) {
