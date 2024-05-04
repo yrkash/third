@@ -4,9 +4,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.alishev.springcourse.third.model.Person;
+import ru.alishev.springcourse.third.model.Role;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersonDetails implements UserDetails {
 
@@ -19,7 +23,7 @@ public class PersonDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(person.getRole()));
+        return mapToGrantedAuthorities(new ArrayList<>(person.getRoles()));
 
     }
 
@@ -51,5 +55,12 @@ public class PersonDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> roles) {
+        return roles.stream()
+                .map(Enum::name)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }

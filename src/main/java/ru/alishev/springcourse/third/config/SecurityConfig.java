@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/login","/auth/registration","/error","/test","/test/auth").permitAll()
                 .antMatchers("/measurements/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/auth/delete", "/auth/add_admin_role").hasAnyRole("ADMIN")
                 .antMatchers("/sensors/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()

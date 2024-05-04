@@ -44,3 +44,9 @@ values (1, 'ROLE_USER'),
        (2, 'ROLE_ADMIN'),
        (2, 'ROLE_USER');
 
+DELETE FROM person WHERE id = 1;
+DELETE FROM person WHERE id = 2;
+
+insert into person_roles (person_id, role)
+values (3, 'ROLE_ADMIN');
+

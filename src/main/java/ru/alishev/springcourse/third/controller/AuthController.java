@@ -113,6 +113,26 @@ public class AuthController {
         return new ResponseEntity<>(authenticationDTO.getUsername(),HttpStatus.OK);
     }
 
+    @PostMapping("/add_admin_role")
+    @Operation(summary = "Добавление роли админа для пользователя")
+    public ResponseEntity<?>  performAddAdminRole(@RequestBody AuthenticationDTO authenticationDTO) {
+        LOGGER.info("Add admin role...");
+        UsernamePasswordAuthenticationToken authInputToken =
+                new UsernamePasswordAuthenticationToken(authenticationDTO.getUsername(), authenticationDTO.getPassword());
+
+        try {
+            authenticationManager.authenticate(authInputToken);
+        } catch (BadCredentialsException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "Incorrect login/password", System.currentTimeMillis());
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+        Person person = convertToPerson(authenticationDTO);
+        registrationService.performAddAdminRole(authenticationDTO.getUsername());
+        return new ResponseEntity<>(authenticationDTO.getUsername(),HttpStatus.OK);
+    }
+
+
     public Person convertToPerson(PersonDTO personDTO) {
         return this.modelMapper.map(personDTO, Person.class);
     }

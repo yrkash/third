@@ -1,15 +1,19 @@
 package ru.alishev.springcourse.third.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 /**
  * @author Neil Alishev
  */
 @Entity
 @Table(name = "Person")
+@Data
 public class Person {
     @Id
     @Column(name = "id")
@@ -29,7 +33,10 @@ public class Person {
     private String password;
 
     @Column(name = "role")
-    private String role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "person_roles")
+    @Enumerated(value = EnumType.STRING)
+    private Set<Role> roles;
 
     // Конструктор по умолчанию нужен для Spring
     public Person() {
@@ -72,13 +79,7 @@ public class Person {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     @Override
     public String toString() {
