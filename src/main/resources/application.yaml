@@ -1,6 +1,8 @@
 spring:
   config:
     import: optional:file:.env[.properties]
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${SPRING_DATASOURCE_URL}
@@ -14,3 +16,5 @@ spring:
 security:
   jwt:
     secret: ${JWT_SECRET}
+server:
+  port: 8080

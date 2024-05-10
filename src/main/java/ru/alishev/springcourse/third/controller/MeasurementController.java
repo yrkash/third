@@ -15,6 +15,7 @@ import ru.alishev.springcourse.third.dto.MeasurementDTO;
 import ru.alishev.springcourse.third.dto.SensorDTO;
 import ru.alishev.springcourse.third.model.Measurement;
 import ru.alishev.springcourse.third.model.Sensor;
+import ru.alishev.springcourse.third.service.KafkaDataService;
 import ru.alishev.springcourse.third.service.MeasurementService;
 import ru.alishev.springcourse.third.service.SensorService;
 import ru.alishev.springcourse.third.util.*;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Tag(name = "Измерения", description = "Контроллер для работы с измерениями. Требуется JWT-аутентификация")
 public class MeasurementController {
+
+    private final KafkaDataService kafkaDataService;
 
     private final MeasurementService measurementService;
     private final SensorService sensorService;
@@ -94,6 +97,7 @@ public class MeasurementController {
             ErrorMessage.makeErrorMessage(bindingResult);
         }
         measurementService.addMeasurement(measurementToAdd);
+        kafkaDataService.send(measurementToAdd);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
