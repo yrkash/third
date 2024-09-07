@@ -39,7 +39,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic voltageTopic() {
-        return TopicBuilder.name("voltage-temperature")
+        return TopicBuilder.name("data-voltage")
                 .partitions(5)
                 .replicas(1)
                 .config(
@@ -51,7 +51,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic powerTopic() {
-        return TopicBuilder.name("power-temperature")
+        return TopicBuilder.name("data-power")
                 .partitions(5)
                 .replicas(1)
                 .config(
